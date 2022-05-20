@@ -11,7 +11,8 @@ var app = builder.Build();
 
 app.MapGet("/greetings", () => app.Configuration["ServerGreeting"]);
 
-app.MapDefaultControllerRoute();   
-
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
