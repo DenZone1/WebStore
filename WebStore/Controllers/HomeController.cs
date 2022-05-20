@@ -6,7 +6,8 @@ namespace WebStore.Controllers
     {
         public IActionResult Index()
         {
-            return Content("Index");
+            return View();
+            //return Content("Index");
         }
 
         public IActionResult Greetings(string? id)
