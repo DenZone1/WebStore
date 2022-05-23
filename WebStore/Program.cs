@@ -1,17 +1,19 @@
 var builder = WebApplication.CreateBuilder(args);
-//êîíôèãóðèðîâàíèå ñîñòàíûõ ÷àñòåé ïðèëîæåíèÿ
+//ÐºÐ¾Ð½Ñ„Ð¸Ð³ÑƒÑ€Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ðµ ÑÐ¾ÑÑ‚Ð°Ð½Ñ‹Ñ… Ñ‡Ð°ÑÑ‚ÐµÐ¹ Ð¿Ñ€Ð¸Ð»Ð¾Ð¶ÐµÐ½Ð¸Ñ
 
 builder.Services.AddControllersWithViews();
 
 
 var app = builder.Build();
 
-//var greeting = app.Configuration["ServerGreeting"];
-//app.MapGet("/", () => greeting);
+
+
+
 
 app.MapGet("/greetings", () => app.Configuration["ServerGreeting"]);
 
-app.MapControllerRoute(
+
+    app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
