@@ -10,7 +10,13 @@ namespace WebStore.Controllers;
 
 public class BlogsController : Controller
 {
-    public IActionResult Index() => View();//должен вернуть представление списка блогов - blog.html
+    public IActionResult Index()
+    {
+        return View();
+    }
 
-    public IActionResult ShopBlog() => View();//олжен вернуть представление списка блого - blog-single.html
+    public IActionResult Details()
+    {
+        return View();
+    }
 }
