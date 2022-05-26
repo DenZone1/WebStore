@@ -10,7 +10,7 @@ namespace WebStore.Controllers;
 public class EmployeesController : Controller
 {
     private readonly IEmployeesData _Employees;
-    private object Model;
+   
 
 
     public EmployeesController(IEmployeesData Employees)
