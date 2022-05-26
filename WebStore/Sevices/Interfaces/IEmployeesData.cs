@@ -8,7 +8,7 @@ using WebStore.Models;
 
 namespace WebStore.Sevices.Interfaces;
 
-public interface IEmpoyeesData
+public interface IEmployeesData
 {
     IEnumerable<Employee> Getall();
 
