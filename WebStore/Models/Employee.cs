@@ -12,4 +12,7 @@ public  class Employee
 
     public string Age { get; set; }
 
+    public override string ToString() => $"(id:{Id} {LastName} {Name} {Patronymic} {Age})";
+   
+
 }

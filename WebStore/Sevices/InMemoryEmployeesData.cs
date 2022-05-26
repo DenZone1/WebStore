@@ -35,6 +35,7 @@ public class InMemoryEmployeesData : IEmployeesData
 
         _Employees.Add(employee);
 
+        _Logger.LogInformation("Employee {0} added", employee);
         return employee.Id; //если есть БД то вызвать SaveChanges()
 
     }
@@ -42,10 +43,15 @@ public class InMemoryEmployeesData : IEmployeesData
     public bool Delete(int Id)
     {
         var employee = GetById(Id);
-        if (employee is null)
+        if (employee is null) 
+        {
+            _Logger.LogWarning("Employee with ID:{0} - doesn`t exist", Id); 
             return false;
+        }
+           
 
         _Employees.Remove(employee);
+        _Logger.LogInformation("Employee {0} deleted", employee);
         return true;
 
     }
@@ -58,8 +64,12 @@ public class InMemoryEmployeesData : IEmployeesData
             return true;
 
         var db_employee = GetById(employee.Id);
-            if(db_employee is null)
+        if (db_employee is null)
+        {
+            _Logger.LogWarning("Employee {0} - doesn`t exist", employee);
             return false;
+        }
+           
 
         db_employee.Id = employee.Id;
         db_employee.LastName = employee.LastName;
@@ -67,6 +77,7 @@ public class InMemoryEmployeesData : IEmployeesData
         db_employee.Patronymic = employee.Patronymic;
         db_employee.Age = employee.Age;
         //если есть БД то вызвать SaveChanges()
+        _Logger.LogInformation("Employee {0} changed", employee);
         return true;
 
     }
