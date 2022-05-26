@@ -1,23 +1,38 @@
 ﻿@model IEnumerable<WebStore.Models.Employee>
 
 <div class="container">
+    <p>
+        <a asp-action="Create" class="btn btn-sm btn-default">Create</a>
+        <a asp-action="Edit" class="btn btn-sm btn-default">Create2</a>
+    </p>
+
+
     <h3>Сотрудники</h3>
 
-    <table class="table">
+    @if (Model.Any())
+    {
+         <table class="table">
         <thead>
-            <tr>
+          <tr>
+              <th></th>
             <th>Id</th>
             <th>Фамилия</th>
             <th>Имя</th>
             <th>Отчетсво</th>
             <th>Возраст</th>
-            </tr>
+            <th></th>
+          </tr>
         </thead>
 
         <tbody>
             @foreach(var employee in Model)
             {
                 <tr>
+                    <td>
+                        <form asp-action="DeleteConfirmed" asp-route-Id="@employee.Id">
+                            <input type="submit" value="X" class="btn-sm btn-danger"/>
+                        </form>
+                    </td>
                     <td>@employee.Id</td>
                     <td>
                         <a asp-controller="Employees" asp-action="Details" asp-route-id="@employee.Id">@employee.LastName</a>
@@ -26,10 +41,22 @@
                     <td>@employee.Name</td>
                     <td>@employee.Patronymic</td>
                     <td>@employee.Age</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-Id="@employee.Id" class="btn btn-sm btn-default">
+                            <i class="fa fa-edit"></i>
+                        </a>
+                        <a asp-action="Delete" asp-route-Id="@employee.Id" class="btn-sm btn-sm btn-danger">
+                            <i class="fa fa-times"></I>
+                        </a>
+                    </td>
                 </tr>   
             }
         </tbody>
-    </table>  
-
-<a asp-controller="Home" asp-action="Index">На главную</a>
+        </table>
+    }
+    else
+    {
+        <p>Emploess doesn`t exist</p>
+    }
+    <a asp-controller="Home" asp-action="Index">На главную</a>
 </div>    

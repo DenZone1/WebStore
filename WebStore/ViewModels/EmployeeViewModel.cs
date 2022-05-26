@@ -1,6 +1,8 @@
-﻿namespace WebStore.Models;
+﻿
 
-public  class Employee
+namespace WebStore.ViewModels;
+
+public class EmployeeViewModel
 {
     public int Id { get; set; }
 
@@ -11,8 +13,5 @@ public  class Employee
     public string Patronymic { get; set; }
 
     public string Age { get; set; }
-
-    public override string ToString() => $"(id:{Id} {LastName} {Name} {Patronymic} {Age})";
-   
-
 }
+
