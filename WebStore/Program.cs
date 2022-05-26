@@ -1,8 +1,12 @@
 using WebStore.Imfrastructure.Middleware;
 using WebStore.Imfrastructure.Conventions;
+using WebStore.Sevices;
+using WebStore.Sevices.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 //конфигурирование состаных частей приложения
+
+builder.Services.AddScoped<IEmployeesData, InMemoryEmployeesData>();//контейнер сервисов(самый универсальный)
 
 builder.Services.AddControllersWithViews(opt => 
 {
