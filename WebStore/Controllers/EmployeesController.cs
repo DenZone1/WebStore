@@ -3,27 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using WebStore.Sevices;
+using WebStore.Sevices.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-
+using WebStore.Imfrastructure.Middleware;
+using WebStore.Imfrastructure.Conventions;
 using WebStore.Models;
 
 namespace WebStore.Controllers;
 //[Route("Staff/{action=Index}/{Id?}")]//переопределение маршрута
 public class EmployeesController : Controller
 {
+    private readonly IEmployeesData _Employees;
 
-    private static readonly List<Employee> __Employees = new()
+    public EmployeesController(IEmployeesData Employees)
     {
-        new Employee {Id = 1, LastName = "Ivanov", Name ="Petr", Patronymic="Vasyl`evich", Age="57" },
-        new Employee {Id = 2, LastName = "Petrov", Name ="Ivan", Patronymic="Sydorovisch", Age="18" },
-        new Employee {Id = 3, LastName = "Pilat", Name ="Pontyi", Patronymic="Rimskii", Age="85" },
-    };
-
+        _Employees = Employees;
+    }
 
     public IActionResult Index()
     {
-        return View(__Employees);
+        var employees = _Employees.Getall();
+        return View(employees);
 
     }
 
@@ -31,13 +32,19 @@ public class EmployeesController : Controller
     //[Route("[controller]/Info/{Id}")] //переопределенияе маршрута для конкретного действия
     public IActionResult Details(int Id)
     {
-        var employee = __Employees.FirstOrDefault(x => x.Id == Id);
+        var employee = _Employees.GetById(Id);
         if (employee is null)
             return NotFound();
 
         return View(employee);
     }
 
-    
+
+    public IActionResult Create() => View();
+    public IActionResult Edit(int Id) => View();
+    public IActionResult Delete(int Id) => View();
+
+
+
 }
 
