@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using WebStore.Models;
 
 namespace WebStore.Controllers;
-
+//[Route("Staff/{action=Index}/{Id?}")]//переопределение маршрута
 public class EmployeesController : Controller
 {
 
@@ -24,9 +24,11 @@ public class EmployeesController : Controller
     public IActionResult Index()
     {
         return View(__Employees);
-        
+
     }
-    
+
+
+    //[Route("[controller]/Info/{Id}")] //переопределенияе маршрута для конкретного действия
     public IActionResult Details(int Id)
     {
         var employee = __Employees.FirstOrDefault(x => x.Id == Id);
