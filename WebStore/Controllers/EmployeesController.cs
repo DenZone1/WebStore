@@ -10,6 +10,8 @@ namespace WebStore.Controllers;
 public class EmployeesController : Controller
 {
     private readonly IEmployeesData _Employees;
+    private object Model;
+
 
     public EmployeesController(IEmployeesData Employees)
     {
@@ -35,11 +37,16 @@ public class EmployeesController : Controller
     }
 
 
-    public IActionResult Create() => View();
+    public IActionResult Create() => View("Edit", new EmployeeViewModel());
 
-    public IActionResult Edit(int Id) 
+    public IActionResult Edit(int? Id) 
     {
-        var employee = _Employees.GetById(Id);
+
+        if (Id == null)
+        return View(new EmployeeViewModel());
+
+
+        var employee = _Employees.GetById((int)Id);
         if (employee is null)
             return NotFound();
 
@@ -52,7 +59,7 @@ public class EmployeesController : Controller
             Age = employee.Age,
         };
 
-
+       
         return View(view_model);
     }
 
@@ -67,6 +74,11 @@ public class EmployeesController : Controller
             Patronymic = Model.Patronymic,
             Age = Model.Age,
         };
+        if (Model.Id==0)
+        {
+            var new_employee_id  =_Employees.Add(employee);
+            return RedirectToAction(nameof(Details), new {Id = new_employee_id  });
+        }
 
         _Employees.Edit(employee);
         return RedirectToAction(nameof(Index));

@@ -33,6 +33,8 @@ public class InMemoryEmployeesData : IEmployeesData
         employee.Id = _LastFreeId;  //не делать если есть БД
         _LastFreeId++;              //не делать если есть БД
 
+        _Employees.Add(employee);
+
         return employee.Id; //если есть БД то вызвать SaveChanges()
 
     }
