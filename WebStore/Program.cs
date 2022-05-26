@@ -1,9 +1,13 @@
 using WebStore.Imfrastructure.Middleware;
+using WebStore.Imfrastructure.Conventions;
 
 var builder = WebApplication.CreateBuilder(args);
 //конфигурирование состаных частей приложения
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(opt => 
+{
+    opt.Conventions.Add(new TestCoventions()); //использование соглашений
+});
 
 
 var app = builder.Build();
@@ -14,7 +18,7 @@ if (app.Environment.IsDevelopment())
         app.UseDeveloperExceptionPage();
     }
 
-app.UseStaticFiles();//использование статическиз файлов
+app.UseStaticFiles();//использование статических файлов
 
 app.UseRouting();//маршрутизация
 
