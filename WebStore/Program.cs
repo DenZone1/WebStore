@@ -1,3 +1,5 @@
+using WebStore.Imfrastructure.Middleware;
+
 var builder = WebApplication.CreateBuilder(args);
 //конфигурирование состаных частей приложения
 
@@ -16,9 +18,11 @@ app.UseStaticFiles();//использование статическиз фай�
 
 app.UseRouting();//маршрутизация
 
+app.UseMiddleware<TestMiddleWare>();//промежуточное ПО
 
 app.MapGet("/greetings", () => app.Configuration["ServerGreeting"]);
 
+app.UseWelcomePage("/welcome");
 
     app.MapControllerRoute(
     name: "default",
