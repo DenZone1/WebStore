@@ -66,22 +66,38 @@ public class EmployeesController : Controller
     [HttpPost]
     public IActionResult Edit(EmployeeViewModel Model) 
     {
-        var employee = new Employee
-        {
-            Id = Model.Id,
-            LastName = Model.LastName,
-            Name = Model.Name,
-            Patronymic = Model.Patronymic,
-            Age = Model.Age,
-        };
-        if (Model.Id==0)
-        {
-            var new_employee_id  =_Employees.Add(employee);
-            return RedirectToAction(nameof(Details), new {Id = new_employee_id  });
-        }
+        // ModelState.IsValid состояние проверки модели
+        if (Model.LastName == "Qwe" && Model.Name == "Qwe" && Model.Patronymic == "Qwe")
+            ModelState.AddModelError("", "Qwe - bad choice");
 
-        _Employees.Edit(employee);
-        return RedirectToAction(nameof(Index));
+        if (Model.Name == "Asd")
+            ModelState.AddModelError("Name", "Asd - bad choice");
+
+
+
+        if (!ModelState.IsValid)
+        return View(Model); 
+        
+            var employee = new Employee
+            {
+                Id = Model.Id,
+                LastName = Model.LastName,
+                Name = Model.Name,
+                Patronymic = Model.Patronymic,
+                Age = Model.Age,
+            };
+            if (Model.Id == 0)
+            {
+                var new_employee_id = _Employees.Add(employee);
+                return RedirectToAction(nameof(Details), new { Id = new_employee_id });
+            }
+
+            _Employees.Edit(employee);
+            return RedirectToAction(nameof(Index));
+        
+        
+
+        
     }
 
 
