@@ -1,7 +1,8 @@
-﻿
-namespace WebStoreDomain.Entities.Base;
+﻿using WebStore.Domain.Entities.Base.Interfaces;
 
-public abstract class NamedEntity : Entity, INamedEntitiy
+namespace WebStore.Domain.Entities.Base;
+
+public abstract class NamedEntity : Entity, INamedEntity
 {
     public string Name { get; set; } = null!;
 }
