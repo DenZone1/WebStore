@@ -25,7 +25,7 @@ public class SectionsViewComponent : ViewComponent
             { 
                     Id = s.Id,
                     Name = s.Name,
-            });
+            }).ToArray();
 
         foreach (var parent_section in parent_sections_views)
         {
