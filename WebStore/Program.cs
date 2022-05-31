@@ -6,7 +6,10 @@ using WebStore.Sevices.Interfaces;
 var builder = WebApplication.CreateBuilder(args);
 //конфигурирование состаных частей приложения
 
-builder.Services.AddScoped<IEmployeesData, InMemoryEmployeesData>();//контейнер сервисов(самый универсальный)
+var services = builder.Services;
+services.AddScoped<IEmployeesData, InMemoryEmployeesData>();//контейнер сервисов(самый универсальный)
+services.AddScoped<IProductData, InMemoryProductData>();
+
 
 builder.Services.AddControllersWithViews(opt => 
 {
