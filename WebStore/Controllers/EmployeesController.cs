@@ -4,18 +4,20 @@ using WebStore.Models;
 
 using WebStore.ViewModels;
 using WebStore.Sevices.Interfaces;
+using WebStore.Imfrastructure.Mapping;
+using AutoMapper;
 
 namespace WebStore.Controllers;
 //[Route("Staff/{action=Index}/{Id?}")]//переопределение маршрута
 public class EmployeesController : Controller
 {
     private readonly IEmployeesData _Employees;
-   
+    private readonly IMapper _Mapper;
 
-
-    public EmployeesController(IEmployeesData Employees)
+    public EmployeesController(IEmployeesData Employees, IMapper Mapper)
     {
         _Employees = Employees;
+        _Mapper = Mapper;
     }
 
     public IActionResult Index()
@@ -50,16 +52,20 @@ public class EmployeesController : Controller
         if (employee is null)
             return NotFound();
 
-        var view_model = new EmployeeViewModel
-        {
-            Id = employee.Id,
-            LastName = employee.LastName,
-            Name = employee.Name,
-            Patronymic = employee.Patronymic,
-            Age = employee.Age,
-        };
+        // var view_model = employee.ToView(); вручную
 
-       
+        var view_model = _Mapper.Map<EmployeeViewModel>(employee);
+
+        //var view_model = new EmployeeViewModel
+        //{
+        //    Id = employee.Id,
+        //    LastName = employee.LastName,
+        //    Name = employee.Name,
+        //    Patronymic = employee.Patronymic,
+        //    Age = employee.Age,
+        //};
+
+
         return View(view_model);
     }
 
@@ -75,14 +81,18 @@ public class EmployeesController : Controller
         if(!ModelState.IsValid)
             return View(Model);
 
-        var employee = new Employee
-        {
-            Id = Model.Id,
-            LastName = Model.LastName,
-            Name = Model.Name,
-            Patronymic = Model.Patronymic,
-            Age = Model.Age,
-        };
+        var employee = _Mapper.Map<Employee>(Model);
+
+        // var employee = Model.FromView(); вручную
+
+        //var employee = new Employee
+        //{
+        //    Id = Model.Id,
+        //    LastName = Model.LastName,
+        //    Name = Model.Name,
+        //    Patronymic = Model.Patronymic,
+        //    Age = Model.Age,
+        //};
         if (Model.Id==0)
         {
             var new_employee_id  =_Employees.Add(employee);

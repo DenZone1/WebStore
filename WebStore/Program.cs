@@ -16,6 +16,8 @@ builder.Services.AddControllersWithViews(opt =>
     opt.Conventions.Add(new TestCoventions()); //использование соглашений
 });
 
+services.AddAutoMapper(typeof(Program));
+
 
 var app = builder.Build();
 
