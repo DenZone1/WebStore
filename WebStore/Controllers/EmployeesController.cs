@@ -4,6 +4,7 @@ using WebStore.Models;
 
 using WebStore.ViewModels;
 using WebStore.Sevices.Interfaces;
+using WebStore.Imfrastructure.Mapping;
 
 namespace WebStore.Controllers;
 //[Route("Staff/{action=Index}/{Id?}")]//переопределение маршрута
@@ -50,16 +51,17 @@ public class EmployeesController : Controller
         if (employee is null)
             return NotFound();
 
-        var view_model = new EmployeeViewModel
-        {
-            Id = employee.Id,
-            LastName = employee.LastName,
-            Name = employee.Name,
-            Patronymic = employee.Patronymic,
-            Age = employee.Age,
-        };
+        var view_model = employee.ToView();
+        //var view_model = new EmployeeViewModel
+        //{
+        //    Id = employee.Id,
+        //    LastName = employee.LastName,
+        //    Name = employee.Name,
+        //    Patronymic = employee.Patronymic,
+        //    Age = employee.Age,
+        //};
 
-       
+
         return View(view_model);
     }
 
@@ -75,14 +77,16 @@ public class EmployeesController : Controller
         if(!ModelState.IsValid)
             return View(Model);
 
-        var employee = new Employee
-        {
-            Id = Model.Id,
-            LastName = Model.LastName,
-            Name = Model.Name,
-            Patronymic = Model.Patronymic,
-            Age = Model.Age,
-        };
+        var employee = Model.FromView();
+
+        //var employee = new Employee
+        //{
+        //    Id = Model.Id,
+        //    LastName = Model.LastName,
+        //    Name = Model.Name,
+        //    Patronymic = Model.Patronymic,
+        //    Age = Model.Age,
+        //};
         if (Model.Id==0)
         {
             var new_employee_id  =_Employees.Add(employee);
