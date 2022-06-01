@@ -1,7 +1,7 @@
 ﻿using WebStore.Domain;
 using WebStore.Sevices.Interfaces;
 using WebStore.ViewModels;
-
+using WebStore.Imfrastructure.Mapping;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebStore.Controllers;
@@ -22,14 +22,7 @@ public class CatalogController : Controller
             BrandId = filter.BrandId,
             SectionId = filter.SectionId,
             Products = products
-               .OrderBy(p => p.Order)
-               .Select(p => new ProductViewModel
-               {
-                   Id = p.Id,
-                   Name = p.Name,
-                   Price = p.Price,
-                   ImageUrl = p.ImageUrl,
-               }),
+               .OrderBy(p => p.Order).ToView()!,
         });
     }
 }
