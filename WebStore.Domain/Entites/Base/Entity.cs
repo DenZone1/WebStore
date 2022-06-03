@@ -1,9 +1,14 @@
-﻿using WebStore.Domain.Entites.Base.Interfaces;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+using WebStore.Domain.Entites.Base.Interfaces;
 
 namespace WebStore.Domain.Entites.Base;
 
 public abstract class Entity : IEntity, IEquatable<Entity>
 {
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
     public bool Equals(Entity? other)
