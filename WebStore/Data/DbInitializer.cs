@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -35,7 +31,7 @@ public class DbInitializer
         return result;
     }
 
-    public async Task InitialyzeAsync(bool RemoveBefore,  CancellationToken Cancel = default)
+    public async Task InitializeAsync(bool RemoveBefore,  CancellationToken Cancel = default)
     {
         _logger.LogInformation("DB Initilialization...");
 
@@ -50,8 +46,9 @@ public class DbInitializer
         await _db.Database.MigrateAsync(Cancel).ConfigureAwait(false);
         _logger.LogInformation("DB migrations sucess");
 
-        await InitializeProductsAsync(Cancel);
-        _logger.LogInformation("DB Initilialization sucess");
+        
+            await InitializeProductsAsync(Cancel);
+        
     }
 
     private async Task InitializeProductsAsync(CancellationToken Cancel)
@@ -68,23 +65,26 @@ public class DbInitializer
 
         _logger.LogInformation("Add Sections in DB...");
         await _db.Sections.AddRangeAsync(TestData.Sections, Cancel);
-        await _db.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [dbo].[Section] ON", Cancel);
-        _db.SaveChangesAsync(Cancel);
-        await _db.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [dbo].[Section] OFF", Cancel);
+
+        await _db.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [dbo].[Sections] ON", Cancel);
+        await _db.SaveChangesAsync(Cancel);
+        await _db.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [dbo].[Sections] OFF", Cancel);
         _logger.LogInformation("Add Sections in DB sucess");
 
 
         _logger.LogInformation("Add Brands in DB...");
         await _db.Brands.AddRangeAsync(TestData.Brands, Cancel);
+
         await _db.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [dbo].[Brands] ON", Cancel);
-        _db.SaveChangesAsync(Cancel);
+        await _db.SaveChangesAsync(Cancel);
         await _db.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [dbo].[Brands] OFF", Cancel);
         _logger.LogInformation("Add Brands in DB sucess");
 
         _logger.LogInformation("Add Products in DB...");
         await _db.Products.AddRangeAsync(TestData.Products, Cancel);
+
         await _db.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [dbo].[Products] ON", Cancel);
-        _db.SaveChangesAsync(Cancel);
+        await _db.SaveChangesAsync(Cancel);
         await _db.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [dbo].[Products] OFF", Cancel);
         _logger.LogInformation("Add Products in DB sucess");
 

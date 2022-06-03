@@ -17,9 +17,9 @@ public class Product : NamedEntity, IOrderedEntity
 
     [ForeignKey(nameof(SectionId))]
     [Required]
-    public Section Section { get; set; }
+    public Section Section { get; set; } = null!;
 
-    
+
     public int? BrandId { get; set; }
 
     [ForeignKey(nameof(BrandId))]
