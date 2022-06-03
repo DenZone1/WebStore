@@ -2,7 +2,7 @@
 using WebStore.Models;
 using WebStore.Sevices.Interfaces;
 
-namespace WebStore.Sevices;
+namespace WebStore.Sevices.InMemory;
 
 public class InMemoryEmployeesData : IEmployeesData
 {
@@ -12,12 +12,12 @@ public class InMemoryEmployeesData : IEmployeesData
 
     public InMemoryEmployeesData(ILogger<InMemoryEmployeesData> Logger)
     {
-       
+
         _Employees = TestData.Employees;
         _Logger = Logger;
 
-        if(_Employees.Count >0)//вычисление последнего свободного Id
-            _LastFreeId = _Employees.Max(e => e.Id)+1;
+        if (_Employees.Count > 0)//вычисление последнего свободного Id
+            _LastFreeId = _Employees.Max(e => e.Id) + 1;
         else
             _LastFreeId = 1;
     }
@@ -43,12 +43,12 @@ public class InMemoryEmployeesData : IEmployeesData
     public bool Delete(int Id)
     {
         var employee = GetById(Id);
-        if (employee is null) 
+        if (employee is null)
         {
-            _Logger.LogWarning("Employee with ID:{0} - doesn`t exist", Id); 
+            _Logger.LogWarning("Employee with ID:{0} - doesn`t exist", Id);
             return false;
         }
-           
+
 
         _Employees.Remove(employee);
         _Logger.LogInformation("Employee {0} deleted", employee);
@@ -69,7 +69,7 @@ public class InMemoryEmployeesData : IEmployeesData
             _Logger.LogWarning("Employee {0} - doesn`t exist", employee);
             return false;
         }
-           
+
 
         db_employee.Id = employee.Id;
         db_employee.LastName = employee.LastName;
@@ -84,12 +84,12 @@ public class InMemoryEmployeesData : IEmployeesData
 
     public IEnumerable<Employee> Getall()
     {
-       return _Employees;
+        return _Employees;
     }
 
     public Employee GetById(int id)
     {
-       var employee = _Employees.FirstOrDefault(e =>e.Id==id);
+        var employee = _Employees.FirstOrDefault(e => e.Id == id);
         return employee;
     }
 }
