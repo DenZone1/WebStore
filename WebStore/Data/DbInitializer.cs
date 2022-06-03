@@ -31,7 +31,10 @@ public class DbInitializer
         return result;
     }
 
-    public async Task InitializeAsync(bool RemoveBefore,  CancellationToken Cancel = default)
+    public async Task InitializeAsync(
+        bool RemoveBefore,
+          bool AddTestData,
+        CancellationToken Cancel = default)
     {
         _logger.LogInformation("DB Initilialization...");
 
@@ -46,9 +49,9 @@ public class DbInitializer
         await _db.Database.MigrateAsync(Cancel).ConfigureAwait(false);
         _logger.LogInformation("DB migrations sucess");
 
-        
+        if(AddTestData)
             await InitializeProductsAsync(Cancel);
-        
+        _logger.LogInformation("DB Initilialization sucess");
     }
 
     private async Task InitializeProductsAsync(CancellationToken Cancel)
