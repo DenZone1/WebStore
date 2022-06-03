@@ -1,10 +1,10 @@
 using WebStore.Imfrastructure.Middleware;
 using WebStore.Imfrastructure.Conventions;
-using WebStore.Sevices;
 using WebStore.Sevices.Interfaces;
 using WebStore.DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using WebStore.Data;
+using WebStore.Sevices.InMemory;
 
 var builder = WebApplication.CreateBuilder(args);
 //конфигурирование состаных частей приложения
