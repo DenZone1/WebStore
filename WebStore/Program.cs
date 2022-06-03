@@ -4,6 +4,7 @@ using WebStore.Sevices;
 using WebStore.Sevices.Interfaces;
 using WebStore.DAL.Context;
 using Microsoft.EntityFrameworkCore;
+using WebStore.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 //конфигурирование состаных частей приложения
@@ -12,6 +13,7 @@ var services = builder.Services;
 services.AddScoped<IEmployeesData, InMemoryEmployeesData>();//контейнер сервисов(самый универсальный)
 services.AddScoped<IProductData, InMemoryProductData>();
 services.AddDbContext<WebStoreDB>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer")));
+services.AddScoped<DbInitializer>();
 
 builder.Services.AddControllersWithViews(opt => 
 {
