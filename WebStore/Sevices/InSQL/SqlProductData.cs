@@ -1,20 +1,22 @@
-﻿
-using WebStore.Data;
+﻿using WebStore.DAL.Context;
 using WebStore.Domain;
 using WebStore.Domain.Entites;
 using WebStore.Sevices.Interfaces;
 
-namespace WebStore.Sevices;
+namespace WebStore.Sevices.InSQL;
 
-public class InMemoryProductData : IProductData
+public class SqlProductData : IProductData
 {
-    public IEnumerable<Section> GetSections() => TestData.Sections;
-  
-    public IEnumerable<Brand> GetBrands() => TestData.Brands;
+    private readonly WebStoreDB _db;
+
+    public SqlProductData(WebStoreDB db) => _db = db;
+
+    public IEnumerable<Section> GetSections() => _db.Sections/*.AsEnumerable()*/;
+    public IEnumerable<Brand> GetBrands() => _db.Brands/*.AsEnumerable()*/;
 
     public IEnumerable<Product> GetProducts(ProductFilter? Filter = null)
     {
-       IEnumerable<Product> query = TestData.Products;
+       IQueryable<Product> query = _db.Products ;
 
         if (Filter is { SectionId: { } section_id })
             query = query.Where(x => x.SectionId == section_id);
@@ -23,5 +25,6 @@ public class InMemoryProductData : IProductData
             query = query.Where(x => x.BrandId == brand_id);
 
         return query;
+
     }
 }
