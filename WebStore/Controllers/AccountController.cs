@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
+
 using WebStore.Domain.Entites.Idnetity;
 using WebStore.ViewModels.Identity;
 
@@ -56,9 +57,49 @@ public class AccountController : Controller
 
     }
 
-    public IActionResult Login() => View();
+    public IActionResult Login(string? ReturnUrl) => View( new LoginViewModel { });
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Login(LoginViewModel Model)
+    {
+        if (ModelState.IsValid)
+            return View(Model);
 
-    public IActionResult Logout() => View();
+
+        var login_result = await _SignInManager.PasswordSignInAsync(
+            Model.UserName,
+            Model.Password,
+            Model.RememberMe,
+            lockoutOnFailure: true);
+
+        if (login_result.Succeeded)
+        {
+            _Logger.LogInformation("Пользователь {0} вошел в систему", Model.UserName);
+
+            // return Redirect(Model.ReturnUrl);
+
+            //if (Url.IsLocalUrl(Model.ReturnUrl))
+            //    return Redirect(Model.ReturnUrl);
+            //return RedirectToAction("Index", "Home");
+
+            return LocalRedirect(Model.ReturnUrl ?? "/");
+        }
+
+        ModelState.AddModelError("", " Неверное имя пользователя или пароль");
+
+
+        _Logger.LogWarning("Ошибка входа пользователя {0} - неверное имя или пароль ", Model.UserName);
+
+        return View(Model);
+    }
+
+
+
+
+    public IActionResult Logout()
+    {
+        return View();
+    }
 
     public IActionResult AccesDenied() => View();
 }
