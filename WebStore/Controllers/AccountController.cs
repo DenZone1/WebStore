@@ -29,7 +29,7 @@ public class AccountController : Controller
     public async Task<IActionResult> Register(RegisterUserViewModel Model)
     {
         if (!ModelState.IsValid)
-        return View(Model);
+            return View(Model);
 
         var user = new User
         {
@@ -38,7 +38,7 @@ public class AccountController : Controller
 
 
         var creation_result = await _UserManager.CreateAsync(user, Model.Password);
-        
+
         if (creation_result.Succeeded)
         {
             _Logger.LogInformation("Пользователь {0} зарегистрирован", user);
@@ -60,7 +60,36 @@ public class AccountController : Controller
     }
 
 
-    public IActionResult Login() => View();
+    public IActionResult Login(string? ReturnUrl) => View(new LoginViewModel {ReturnUrl = ReturnUrl });
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Login(LoginViewModel Model)
+    {
+        if (!ModelState.IsValid)
+            return View(Model);
+        
+        var login_result = await _SignInManager.PasswordSignInAsync(
+           Model.UserName,
+           Model.Password,
+           Model.RememberMe,
+           lockoutOnFailure: true);
+
+        if (login_result.Succeeded)
+        {
+            _Logger.LogInformation("Пользователь {0} успешно вошёл в систему", Model.UserName);
+
+            
+
+            return LocalRedirect(Model.ReturnUrl ?? "/");
+        }
+
+        ModelState.AddModelError("", "Неверное имя или пароль");
+
+        _Logger.LogWarning("Ошибка входа пользователя {0} - неверное имя или пароль", Model.UserName);
+
+        return View(Model);
+
+    }
 
     public IActionResult Logout() => View();
 
