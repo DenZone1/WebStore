@@ -63,34 +63,42 @@ public class DbInitializer
             return;
         }
 
-       
+        var sections_pool = TestData.Sections.ToDictionary(s => s.Id);
+        var brands_pool = TestData.Brands.ToDictionary(b => b.Id);
+
+        foreach (var child_section in TestData.Sections.Where(s => s.ParentId is not null))
+            child_section.Parent = sections_pool[child_section.Id];
+
+        foreach (var product in TestData.Products)
+        {
+            product.Section = sections_pool[product.SectionId];
+            if(product.BrandId is { } brand_id)
+                product.Brand =brands_pool[brand_id];
+           
+            product.Id = 0;
+            product.SectionId = 0;
+            product.BrandId = 0;
+
+        }
+        foreach(var brand in TestData.Brands)
+        brand.Id= 0;
+
+        foreach(var section in TestData.Sections)
+        { 
+            section.Id= 0;
+            section.ParentId = 0;
+        }
+           
+
+
+
         await using var transaction = await _db.Database.BeginTransactionAsync(Cancel);
 
-        _logger.LogInformation("Add Sections in DB...");
-        await _db.Sections.AddRangeAsync(TestData.Sections, Cancel);
-
-        await _db.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [dbo].[Sections] ON", Cancel);
-        await _db.SaveChangesAsync(Cancel);
-        await _db.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [dbo].[Sections] OFF", Cancel);
-        _logger.LogInformation("Add Sections in DB sucess");
-
-
-        _logger.LogInformation("Add Brands in DB...");
+        await _db.Sections.AddRangeAsync(TestData.Sections, Cancel);//добавление данных в БД
         await _db.Brands.AddRangeAsync(TestData.Brands, Cancel);
-
-        await _db.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [dbo].[Brands] ON", Cancel);
-        await _db.SaveChangesAsync(Cancel);
-        await _db.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [dbo].[Brands] OFF", Cancel);
-        _logger.LogInformation("Add Brands in DB sucess");
-
-        _logger.LogInformation("Add Products in DB...");
         await _db.Products.AddRangeAsync(TestData.Products, Cancel);
 
-        await _db.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [dbo].[Products] ON", Cancel);
         await _db.SaveChangesAsync(Cancel);
-        await _db.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT [dbo].[Products] OFF", Cancel);
-        _logger.LogInformation("Add Products in DB sucess");
-
 
         await transaction.CommitAsync(Cancel);
     }
