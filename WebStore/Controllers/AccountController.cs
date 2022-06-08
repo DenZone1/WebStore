@@ -85,7 +85,15 @@ public class AccountController : Controller
 
     }
 
-    public IActionResult Logout() => View();
+    public async Task<IActionResult> Logout()
+    {
+        var user_name = User.Identity!.Name;
+
+        await _SignInManager.SignOutAsync();
+        _Logger.LogInformation("User {0} sign oug of system", user_name);
+
+        return RedirectToAction("Index", "Home");
+    }
 
     public IActionResult AccesDenied() => View();
 }
