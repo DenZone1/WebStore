@@ -82,6 +82,8 @@ public class InMemoryEmployeesData : IEmployeesData
 
     }
 
+    
+
     public IEnumerable<Employee> Getall()
     {
         return _Employees;
@@ -91,6 +93,27 @@ public class InMemoryEmployeesData : IEmployeesData
     {
         var employee = _Employees.FirstOrDefault(e => e.Id == id);
         return employee;
+    }
+
+    public int GetCount()
+    {
+        return _Employees.Count;
+    }
+    public IEnumerable<Employee> Get(int Skip, int Take)
+    {
+        IEnumerable<Employee>  query = _Employees;
+        
+        if (Take == 0) return Enumerable.Empty<Employee>();
+
+        if (Skip > 0)
+        {
+            if(Skip > _Employees.Count) return Enumerable.Empty<Employee>();
+
+            query = query.Skip(Skip);
+        }
+           return query = query.Take(Take);
+
+
     }
 }
 

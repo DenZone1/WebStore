@@ -10,7 +10,11 @@ namespace WebStore.Sevices.Interfaces;
 
 public interface IEmployeesData
 {
+    int GetCount();
+
     IEnumerable<Employee> Getall();
+
+    IEnumerable<Employee> Get(int Skip, int Take);
 
     Employee GetById(int id);
 

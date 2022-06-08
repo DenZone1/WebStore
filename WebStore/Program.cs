@@ -6,7 +6,6 @@ using WebStore.Data;
 using WebStore.Domain.Entites.Identity;
 using WebStore.Imfrastructure.Conventions;
 using WebStore.Imfrastructure.Middleware;
-using WebStore.Sevices.InMemory;
 using WebStore.Sevices.InSQL;
 using WebStore.Sevices.Interfaces;
 

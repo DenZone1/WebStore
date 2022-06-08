@@ -1,11 +1,9 @@
-﻿
-
-using WebStore.DAL.Context;
+﻿using WebStore.DAL.Context;
 using WebStore.DAL.Migrations;
 using WebStore.Domain.Entites;
 using WebStore.Sevices.Interfaces;
 
-namespace WebStore.Sevices.InMemory;
+namespace WebStore.Sevices.InSQL;
 
 public class SQLEmployeesData : IEmployeesData
 {
@@ -24,7 +22,7 @@ public class SQLEmployeesData : IEmployeesData
             throw new ArgumentNullException(nameof(employee));
 
 
-     
+
         _db.Employees.Add(employee);
         _db.SaveChanges();
 
@@ -36,7 +34,7 @@ public class SQLEmployeesData : IEmployeesData
     {
         // var employee = GetById(Id);
         var employee = _db.Employees
-            .Select(e => new Employee {Id = e.Id })
+            .Select(e => new Employee { Id = e.Id })
             .FirstOrDefault(e => e.Id == Id);
 
         if (employee is null)
@@ -55,7 +53,7 @@ public class SQLEmployeesData : IEmployeesData
     {
         if (employee is null)
             throw new ArgumentNullException(nameof(employee));
-      
+
 
         var db_employee = GetById(employee.Id);
         if (db_employee is null)
@@ -76,11 +74,25 @@ public class SQLEmployeesData : IEmployeesData
         return true;
     }
 
+  
     public IEnumerable<Employee> Getall() => _db.Employees;
 
 
     // public Employee? GetById(int id)=> _db.Employees.FirstOrDefault(e => e.Id == id);
     // public Employee? GetById(int id) => _db.Employees.SingleOrDefault(e => e.Id == id);
     public Employee? GetById(int id) => _db.Employees.Find(id);
+
+    public int GetCount()=> _db.Employees.Count();
+  
+    public IEnumerable<Employee> Get(int Skip, int Take)
+    {
+        IQueryable<Employee> query = _db.Employees;
+        if (Take == 0) return Enumerable.Empty<Employee>();
+
+
+        if(Skip>0)
+            query = query.Skip(Skip);
+        return query.Take(Take);
+    }
 
 }
