@@ -49,8 +49,12 @@ public class DbInitializer
         await _db.Database.MigrateAsync(Cancel).ConfigureAwait(false);
         _logger.LogInformation("DB migrations sucess");
 
-        if(AddTestData)
-            await InitializeProductsAsync(Cancel);
+        if (AddTestData)
+        {
+             await InitializeProductsAsync(Cancel);
+            await InitializeEmployeesAsync(Cancel);
+        }
+           
         _logger.LogInformation("DB Initilialization sucess");
     }
 
@@ -103,4 +107,24 @@ public class DbInitializer
 
         await transaction.CommitAsync(Cancel);
     }
+
+    private async Task InitializeEmployeesAsync(CancellationToken Cancel)
+    {
+        if (await _db.Employees.AnyAsync(Cancel).ConfigureAwait(false))
+        {
+            _logger.LogInformation("DB Initilialization tables emmployees no need");
+        return;
+        }
+        _logger.LogInformation("DB Initilialization tables emmployees...");
+
+        foreach (var employee in TestData.Employees)
+            employee.Id = 0;
+
+        await _db.AddRangeAsync(TestData.Employees, Cancel);
+        await _db.SaveChangesAsync(Cancel);
+
+        _logger.LogInformation("DB Initilialization tables emmployees sucess");
+
+    }
+    
 }
