@@ -1,11 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
+using Microsoft.EntityFrameworkCore;
+
 using WebStore.Domain.Entites.Base;
 
 namespace WebStore.Domain.Entites;
+ [Index(nameof(LastName), nameof(Name), nameof(Patronymic), nameof(Age), IsUnique = true)]
 
 public class Employee : Entity
 {
+   
+
 
     [Required]
     public string LastName { get; set; } = null!;
