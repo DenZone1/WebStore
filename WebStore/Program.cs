@@ -53,8 +53,11 @@ services.ConfigureApplicationCookie(opt =>
     opt.SlidingExpiration = true;
 });
 
-services.AddScoped<IEmployeesData, InMemoryEmployeesData>();//контейнер сервисов(самый универсальный)
+services.AddScoped<IEmployeesData, SQLEmployeesData>();
 services.AddScoped<IProductData, SqlProductData>();
+
+//services.AddScoped<IEmployeesData, InMemoryEmployeesData>();//контейнер сервисов(самый универсальный)
+//services.AddScoped<IProductData, SqlProductData>();
 
 services.AddDbContext<WebStoreDB>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer")));
 services.AddScoped<DbInitializer>();
