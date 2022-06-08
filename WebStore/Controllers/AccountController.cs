@@ -2,22 +2,23 @@
 using Microsoft.AspNetCore.Mvc;
 
 using WebStore.Domain.Entites.Identity;
+using WebStore.Domain.Entites.Identity;
 using WebStore.ViewModels.Identity;
 
 namespace WebStore.Controllers;
 
 public class AccountController : Controller
 {
-    private readonly UserManager<User> _UserMAnager;
+    private readonly UserManager<User> _UserManager;
     private readonly SignInManager<User> _SignInManager;
     private readonly ILogger<AccountController> _Logger;
 
     public AccountController(
-        UserManager<User> UserMAnager,
+        UserManager<User> UserManager,
         SignInManager<User> SignInManager,
         ILogger<AccountController> Logger)
     {
-        _UserMAnager = UserMAnager;
+        _UserManager = UserManager;
         _SignInManager = SignInManager;
         _Logger = Logger;
     }
@@ -28,7 +29,7 @@ public class AccountController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Register(RegisterUserViewModel Model)
     {
-        if(ModelState.IsValid)
+        if (!ModelState.IsValid)
             return View(Model);
 
         var user = new User
@@ -36,24 +37,27 @@ public class AccountController : Controller
             UserName = Model.UserName,
         };
 
-        var creation_result = await _UserMAnager.CreateAsync(user,Model.Password);
+        var creation_result = await _UserManager.CreateAsync(user, Model.Password);
         if (creation_result.Succeeded)
         {
-            _Logger.LogInformation("User {0} Registered", user);
+            _Logger.LogInformation("Пользователь {0} зарегистрирован", user);
 
             await _SignInManager.SignInAsync(user, false);
             return RedirectToAction("Index", "Home");
         }
+
         foreach (var error in creation_result.Errors)
             ModelState.AddModelError("", error.Description);
 
         var error_info = string.Join(", ", creation_result.Errors.Select(e => e.Description));
-        _Logger.LogWarning("Error User Registation {0}:{1}",user, error_info);
+        _Logger.LogWarning("Ошибка при регистрации пользователя {0}:{1}",
+            user,
+            error_info);
 
         return View(Model);
     }
 
-    public IActionResult Login(string? ReturnUrl) => View( new LoginViewModel {ReturnUrl = ReturnUrl });
+    public IActionResult Login(string? ReturnUrl) => View(new LoginViewModel { ReturnUrl = ReturnUrl });
 
     [HttpPost]
     [ValidateAntiForgeryToken]
@@ -66,23 +70,26 @@ public class AccountController : Controller
             Model.UserName,
             Model.Password,
             Model.RememberMe,
-            lockoutOnFailure : true);
+            lockoutOnFailure: true);
 
         if (login_result.Succeeded)
         {
-            _Logger.LogInformation("User {0} Enter the system", Model.UserName);
+            _Logger.LogInformation("Пользователь {0} успешно вошёл в систему", Model.UserName);
+
+            //return Redirect(Model.ReturnUrl);
 
             //if (Url.IsLocalUrl(Model.ReturnUrl))
             //    return Redirect(Model.ReturnUrl);
             //return RedirectToAction("Index", "Home");
+
             return LocalRedirect(Model.ReturnUrl ?? "/");
         }
 
-        ModelState.AddModelError("", "Invalid User Name or Password");
-        _Logger.LogWarning("Error enter the system {0} Invalid User Name or Password", Model.UserName);
+        ModelState.AddModelError("", "Неверное имя пользователя, или пароль");
+
+        _Logger.LogWarning("Ошибка входа пользователя {0} - неверное имя, или пароль", Model.UserName);
 
         return View(Model);
-
     }
 
     public async Task<IActionResult> Logout()
@@ -90,7 +97,8 @@ public class AccountController : Controller
         var user_name = User.Identity!.Name;
 
         await _SignInManager.SignOutAsync();
-        _Logger.LogInformation("User {0} sign oug of system", user_name);
+
+        _Logger.LogInformation("Пользователь {0} вышел из системы", user_name);
 
         return RedirectToAction("Index", "Home");
     }
