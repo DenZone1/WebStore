@@ -1,7 +1,7 @@
 ﻿
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
+
 
 using WebStore.DAL.Context;
 
@@ -49,8 +49,12 @@ public class DbInitializer
         await _db.Database.MigrateAsync(Cancel).ConfigureAwait(false);
         _logger.LogInformation("DB migrations sucess");
 
-        if(AddTestData)
-            await InitializeProductsAsync(Cancel);
+        if (AddTestData)
+        {
+             await InitializeProductsAsync(Cancel);
+            await InitializeEmployeesAsync(Cancel);
+        }
+           
         _logger.LogInformation("DB Initilialization sucess");
     }
 
@@ -67,6 +71,62 @@ public class DbInitializer
 
         var sections_pool = TestData.Sections.ToDictionary(s => s.Id);
         var brands_pool = TestData.Brands.ToDictionary(b => b.Id);
+
+
+
+        foreach (var child_section in TestData.Sections.Where(s => s.ParentId is not null))
+            child_section.Parent = sections_pool[child_section.Id];
+
+        foreach (var product in TestData.Products)
+        {
+            product.Section = sections_pool[product.SectionId];
+            if (product.BrandId is { } brand_id)
+                product.Brand = brands_pool[brand_id];
+
+            product.Id = 0;
+            product.SectionId = 0;
+            product.BrandId = 0;
+        }
+
+        foreach (var brand in TestData.Brands)
+        brand.Id = 0;
+
+        foreach (var section in TestData.Sections)
+        {
+            section.Id = 0;
+            section.ParentId = 0;
+        }    
+
+        await using var transaction = await _db.Database.BeginTransactionAsync(Cancel);
+        _logger.LogInformation("Add DATA in DB...");
+        await _db.Sections.AddRangeAsync(TestData.Sections, Cancel);
+        await _db.Brands.AddRangeAsync(TestData.Brands, Cancel);
+        await _db.Products.AddRangeAsync(TestData.Products, Cancel);
+
+        await _db.SaveChangesAsync(Cancel);
+        _logger.LogInformation("Add DATA in DB sucess");
+
+        await transaction.CommitAsync(Cancel);
+    }
+
+    private async Task InitializeEmployeesAsync(CancellationToken Cancel)
+    {
+        if (await _db.Employees.AnyAsync(Cancel).ConfigureAwait(false))
+        {
+            _logger.LogInformation("DB Initilialization tables emmployees no need");
+        return;
+        }
+        _logger.LogInformation("DB Initilialization tables emmployees...");
+
+        foreach (var employee in TestData.Employees)
+            employee.Id = 0;
+
+        await _db.AddRangeAsync(TestData.Employees, Cancel);
+        await _db.SaveChangesAsync(Cancel);
+
+        _logger.LogInformation("DB Initilialization tables emmployees sucess");
+
+
 
         foreach (var child_section in TestData.Sections.Where(s => s.ParentId is not null))
             child_section.Parent = sections_pool[child_section.Id];
@@ -103,5 +163,7 @@ public class DbInitializer
 
         await transaction.CommitAsync(Cancel);
         _logger.LogInformation("Tranzaction in DataBase sucess");
+
     }
+    
 }

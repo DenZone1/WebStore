@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using WebStore.Domain.Entites;
-using WebStore.Domain.Entites.Idnetity;
+
+using WebStore.Domain.Entites.Identity;
+
+
 
 namespace WebStore.DAL.Context;
 
@@ -13,6 +16,8 @@ public class WebStoreDB : IdentityDbContext<User, Role, string>
 
 
     public DbSet<Section> Sections { get; set; } = null!;
+
+    public DbSet<Employee> Employees { get; set; } = null!;
 
     public WebStoreDB(DbContextOptions<WebStoreDB> options) : base(options)
     {

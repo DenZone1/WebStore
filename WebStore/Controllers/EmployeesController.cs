@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-using WebStore.Models;
-
 using WebStore.ViewModels;
 using WebStore.Sevices.Interfaces;
 using WebStore.Imfrastructure.Mapping;
 using AutoMapper;
+using WebStore.Domain.Entites;
 
 namespace WebStore.Controllers;
 //[Route("Staff/{action=Index}/{Id?}")]//переопределение маршрута
@@ -20,9 +19,22 @@ public class EmployeesController : Controller
         _Mapper = Mapper;
     }
 
-    public IActionResult Index()
+    public IActionResult Index(int? Page, int PageSize = 15)
     {
-        var employees = _Employees.Getall();
+        //var employees = _Employees.Getall();
+
+        IEnumerable<Employee> employees;
+        if (Page is { } page && PageSize > 0)
+        {
+            employees = _Employees.Get(page * PageSize, PageSize);
+        }
+        else
+        employees = _Employees.Getall();
+
+        ViewBag.PagesCount = PageSize > 0 ?
+            (int?)Math.Ceiling(_Employees.GetCount() / (double)PageSize)
+            : null!;
+
         return View(employees);
 
     }

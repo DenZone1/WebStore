@@ -1,5 +1,7 @@
-﻿@model IEnumerable<WebStore.Models.Employee>
-
+﻿@model IEnumerable<Employee>
+@{
+    var pages_count =  (int?)ViewBag.PagesCount;
+}
 <div class="container">
     <p>
         <a asp-action="Create" class="btn btn-sm btn-default">Create</a>
@@ -58,5 +60,11 @@
     {
         <p>Emploess doesn`t exist</p>
     }
+
+    @if (pages_count != null)
+    {
+        <p>Число страниц - @pages_count</p>
+    }
+
     <a asp-controller="Home" asp-action="Index">На главную</a>
 </div>    

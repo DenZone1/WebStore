@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebStore.DAL.Context;
 
@@ -11,9 +12,10 @@ using WebStore.DAL.Context;
 namespace WebStore.DAL.Migrations
 {
     [DbContext(typeof(WebStoreDB))]
-    partial class WebStoreDBModelSnapshot : ModelSnapshot
+    [Migration("20220608143853_Employees")]
+    partial class Employees
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -151,7 +153,6 @@ namespace WebStore.DAL.Migrations
                     b.ToTable("Brands");
                 });
 
-
             modelBuilder.Entity("WebStore.Domain.Entites.Employee", b =>
                 {
                     b.Property<int>("Id")
@@ -185,9 +186,6 @@ namespace WebStore.DAL.Migrations
                 });
 
             modelBuilder.Entity("WebStore.Domain.Entites.Identity.Role", b =>
-
-            modelBuilder.Entity("WebStore.Domain.Entites.Idnetity.Role", b =>
-
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -214,12 +212,8 @@ namespace WebStore.DAL.Migrations
                     b.ToTable("AspNetRoles", (string)null);
                 });
 
-
-            
-
-     
-       modelBuilder.Entity("WebStore.Domain.Entites.Idnetity.User", b =>
-              {
+            modelBuilder.Entity("WebStore.Domain.Entites.Identity.User", b =>
+                {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
@@ -351,9 +345,7 @@ namespace WebStore.DAL.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
-
-                    b.HasOne("WebStore.Domain.Entites.Idnetity.Role", null)
-
+                    b.HasOne("WebStore.Domain.Entites.Identity.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -362,9 +354,7 @@ namespace WebStore.DAL.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-
-                    b.HasOne("WebStore.Domain.Entites.Idnetity.User", null)
-
+                    b.HasOne("WebStore.Domain.Entites.Identity.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -373,9 +363,7 @@ namespace WebStore.DAL.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-
-                    b.HasOne("WebStore.Domain.Entites.Idnetity.User", null)
-
+                    b.HasOne("WebStore.Domain.Entites.Identity.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -383,16 +371,14 @@ namespace WebStore.DAL.Migrations
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
-
-                    b.HasOne("WebStore.Domain.Entites.Idnetity.Role", null)
-
+                {
+                    b.HasOne("WebStore.Domain.Entites.Identity.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WebStore.Domain.Entites.Idnetity.User", null)
-
+                    b.HasOne("WebStore.Domain.Entites.Identity.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -401,9 +387,7 @@ namespace WebStore.DAL.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-
-                    b.HasOne("WebStore.Domain.Entites.Idnetity.User", null)
-
+                    b.HasOne("WebStore.Domain.Entites.Identity.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

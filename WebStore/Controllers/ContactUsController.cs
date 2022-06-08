@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Mvc;
 
-using WebStore.Models;
+using WebStore.Sevices.Interfaces;
 
 namespace WebStore.Controllers;
 
