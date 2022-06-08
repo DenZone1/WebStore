@@ -53,7 +53,37 @@ public class AccountController : Controller
         return View(Model);
     }
 
-    public IActionResult Login() => View();
+    public IActionResult Login(string? ReturnUrl) => View( new LoginViewModel {ReturnUrl = ReturnUrl });
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Login(LoginViewModel Model)
+    {
+        if (!ModelState.IsValid)
+            return View(Model);
+
+        var login_result = await _SignInManager.PasswordSignInAsync(
+            Model.UserName,
+            Model.Password,
+            Model.RememberMe,
+            lockoutOnFailure : true);
+
+        if (login_result.Succeeded)
+        {
+            _Logger.LogInformation("User {0} Enter the system", Model.UserName);
+
+            //if (Url.IsLocalUrl(Model.ReturnUrl))
+            //    return Redirect(Model.ReturnUrl);
+            //return RedirectToAction("Index", "Home");
+            return LocalRedirect(Model.ReturnUrl ?? "/");
+        }
+
+        ModelState.AddModelError("", "Invalid User Name or Password");
+        _Logger.LogWarning("Error enter the system {0} Invalid User Name or Password", Model.UserName);
+
+        return View(Model);
+
+    }
 
     public IActionResult Logout() => View();
 
