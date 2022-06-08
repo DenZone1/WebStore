@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-using WebStore.Models;
-
 using WebStore.ViewModels;
 using WebStore.Sevices.Interfaces;
 using WebStore.Imfrastructure.Mapping;
 using AutoMapper;
+using WebStore.Domain.Entites;
 
 namespace WebStore.Controllers;
 //[Route("Staff/{action=Index}/{Id?}")]//переопределение маршрута

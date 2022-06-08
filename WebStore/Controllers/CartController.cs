@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WebStore.Models;
+using WebStore.Sevices.Interfaces;
 
 using Microsoft.AspNetCore.Mvc;
 

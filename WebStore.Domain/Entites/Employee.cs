@@ -1,6 +1,6 @@
-﻿namespace WebStore.Models;
+﻿namespace WebStore.Domain.Entites;
 
-public  class Employee
+public class Employee
 {
     public int Id { get; set; }
 
@@ -13,6 +13,6 @@ public  class Employee
     public string Age { get; set; } = null!;
 
     public override string ToString() => $"(id:{Id} {LastName} {Name} {Patronymic} {Age})";
-   
+
 
 }

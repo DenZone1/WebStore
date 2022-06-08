@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-using WebStore.Models;
+using WebStore.Domain.Entites;
 using WebStore.ViewModels;
-
+using WebStore.Sevices.Interfaces;
 namespace WebStore.Imfrastructure.Mapping;
 
 public static class EmployeeMapper
