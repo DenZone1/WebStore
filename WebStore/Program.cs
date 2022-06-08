@@ -86,6 +86,9 @@ app.UseStaticFiles();//использование статических фай�
 
 app.UseRouting();//маршрутизация
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.UseMiddleware<TestMiddleWare>();//промежуточное ПО
 
 app.MapGet("/greetings", () => app.Configuration["ServerGreeting"]);
