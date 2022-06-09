@@ -6,6 +6,7 @@ using WebStore.Data;
 using WebStore.Domain.Entites.Identity;
 using WebStore.Imfrastructure.Conventions;
 using WebStore.Imfrastructure.Middleware;
+using WebStore.Sevices.InCookies;
 using WebStore.Sevices.InSQL;
 
 using WebStore.Sevices.Interfaces;
@@ -88,6 +89,7 @@ services.AddScoped<IEmployeesData, SQLEmployeesData>();
 services.AddScoped<IEmployeesData, InMemoryEmployeesData>();//контейнер сервисов(самый универсальный)
 
 services.AddScoped<IProductData, SqlProductData>();
+services.AddScoped<ICartService, InCookiesCartService>();
 
 //services.AddScoped<IEmployeesData, InMemoryEmployeesData>();//контейнер сервисов(самый универсальный)
 //services.AddScoped<IProductData, SqlProductData>();
@@ -112,6 +114,7 @@ using (var scope = app.Services.CreateScope())
         RemoveBefore: app.Configuration.GetValue("DbRecreate", false),
         AddTestData: app.Configuration.GetValue("DbAddTestData", false));
 }
+
 
 if (app.Environment.IsDevelopment())
 {

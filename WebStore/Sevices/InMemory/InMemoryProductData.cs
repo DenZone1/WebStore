@@ -5,6 +5,7 @@ using WebStore.Sevices.Interfaces;
 
 namespace WebStore.Sevices.InMemory;
 
+[Obsolete]
 public class InMemoryProductData : IProductData
 {
     public IEnumerable<Section> GetSections() => TestData.Sections;
@@ -22,5 +23,20 @@ public class InMemoryProductData : IProductData
             query = query.Where(x => x.BrandId == brand_id);
 
         return query;
+    }
+
+    public Section? GetSectionById(int id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Brand? GetBrandById(int id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Product? GetProductById(int id)
+    {
+        throw new NotImplementedException();
     }
 }

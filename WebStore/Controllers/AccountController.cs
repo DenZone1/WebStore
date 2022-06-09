@@ -1,5 +1,10 @@
 
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+
+
 ﻿using Microsoft.AspNetCore.Identity;
+
 using Microsoft.AspNetCore.Mvc;
 
 using WebStore.Domain.Entites.Identity;
@@ -16,6 +21,7 @@ using WebStore.ViewModels.Identity;
 
 namespace WebStore.Controllers;
 
+[Authorize]
 public class AccountController : Controller
 {
     private readonly UserManager<User> _UserManager;
@@ -32,9 +38,11 @@ public class AccountController : Controller
         _Logger = Logger;
     }
 
+    [AllowAnonymous]
     public IActionResult Register() => View(new RegisterUserViewModel());
 
     [HttpPost]
+    [AllowAnonymous]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Register(RegisterUserViewModel Model)
     {
@@ -59,6 +67,8 @@ public class AccountController : Controller
 
             _Logger.LogInformation("Пользователь {0} зарегистрирован", user);
 
+            await _UserManager.AddToRoleAsync(user, Role.User);
+
             await _SignInManager.SignInAsync(user, false);
             return RedirectToAction("Index", "Home");
         }
@@ -74,6 +84,7 @@ public class AccountController : Controller
         return View(Model);
     }
 
+    [AllowAnonymous]
     public IActionResult Login(string? ReturnUrl) => View(new LoginViewModel { ReturnUrl = ReturnUrl });
 
 
@@ -96,6 +107,7 @@ public class AccountController : Controller
     public IActionResult Login(string? ReturnUrl) => View( new LoginViewModel { });
 
     [HttpPost]
+    [AllowAnonymous]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Login(LoginViewModel Model)
     {
