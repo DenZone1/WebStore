@@ -15,4 +15,21 @@ public class CartController : Controller
     {
         return View(_CartService.GetViewModel());
     }
+    public IActionResult Add(int Id)
+    {
+        _CartService.Add(Id);
+        return RedirectToAction("Index", "Cart");
+    }
+
+    public IActionResult Decrement(int Id)
+    {
+        _CartService.Decrement(Id);
+        return RedirectToAction("Index", "Cart");
+    }
+
+    public IActionResult Remove(int Id)
+    {
+        _CartService.Remove(Id);
+        return RedirectToAction("Index", "Cart");
+    }
 }
