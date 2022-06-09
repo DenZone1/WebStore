@@ -5,6 +5,8 @@ using WebStore.Sevices.Interfaces;
 using WebStore.Imfrastructure.Mapping;
 using AutoMapper;
 using WebStore.Domain.Entites;
+using Microsoft.AspNetCore.Authorization;
+using WebStore.Domain.Entites.Identity;
 
 namespace WebStore.Controllers;
 //[Route("Staff/{action=Index}/{Id?}")]//переопределение маршрута
@@ -29,7 +31,7 @@ public class EmployeesController : Controller
             employees = _Employees.Get(page * PageSize, PageSize);
         }
         else
-        employees = _Employees.Getall();
+            employees = _Employees.Getall();
 
         ViewBag.PagesCount = PageSize > 0 ?
             (int?)Math.Ceiling(_Employees.GetCount() / (double)PageSize)
@@ -50,9 +52,10 @@ public class EmployeesController : Controller
         return View(employee);
     }
 
-
+    [Authorize(Roles = Role.Administrator)]
     public IActionResult Create() => View("Edit", new EmployeeViewModel());
 
+    [Authorize(Roles = Role.Administrator)]
     public IActionResult Edit(int? Id) 
     {
 
@@ -82,6 +85,7 @@ public class EmployeesController : Controller
     }
 
     [HttpPost]
+    [Authorize(Roles = Role.Administrator)]
     public IActionResult Edit(EmployeeViewModel Model) 
     {
         if (Model.LastName == "Qwe" && Model.Name == "Qwe" && Model.Patronymic == "Qwe")
@@ -115,7 +119,7 @@ public class EmployeesController : Controller
         return RedirectToAction(nameof(Index));
     }
 
-
+    [Authorize(Roles = Role.Administrator)]
     public IActionResult Delete(int Id)
     {
         // _Employees.Delete(Id);                      //нельзя использовать
@@ -136,6 +140,7 @@ public class EmployeesController : Controller
 
     }
     [HttpPost]
+    [Authorize(Roles = Role.Administrator)]
     public IActionResult DeleteConfirmed(int Id)
     {
         if(!_Employees.Delete(Id))

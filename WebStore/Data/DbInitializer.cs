@@ -104,7 +104,7 @@ public class DbInitializer
         foreach (var section in TestData.Sections)
         {
             section.Id = 0;
-            section.ParentId = null;
+            section.ParentId = 0;
         }    
 
         await using var transaction = await _db.Database.BeginTransactionAsync(Cancel);

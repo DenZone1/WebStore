@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 using WebStore.Domain.Entites.Identity;
@@ -7,6 +8,7 @@ using WebStore.ViewModels.Identity;
 
 namespace WebStore.Controllers;
 
+[Authorize]
 public class AccountController : Controller
 {
     private readonly UserManager<User> _UserManager;
