@@ -10,6 +10,7 @@ using WebStore.Domain.Entites.Identity;
 
 namespace WebStore.Controllers;
 //[Route("Staff/{action=Index}/{Id?}")]//переопределение маршрута
+[Authorize]
 public class EmployeesController : Controller
 {
     private readonly IEmployeesData _Employees;

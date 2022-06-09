@@ -25,9 +25,11 @@ public class AccountController : Controller
         _Logger = Logger;
     }
 
+    [AllowAnonymous]
     public IActionResult Register() => View(new RegisterUserViewModel());
 
     [HttpPost]
+    [AllowAnonymous]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Register(RegisterUserViewModel Model)
     {
@@ -61,9 +63,11 @@ public class AccountController : Controller
         return View(Model);
     }
 
+    [AllowAnonymous]
     public IActionResult Login(string? ReturnUrl) => View(new LoginViewModel { ReturnUrl = ReturnUrl });
 
     [HttpPost]
+    [AllowAnonymous]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Login(LoginViewModel Model)
     {
