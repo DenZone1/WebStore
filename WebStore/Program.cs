@@ -6,6 +6,7 @@ using WebStore.Data;
 using WebStore.Domain.Entites.Identity;
 using WebStore.Imfrastructure.Conventions;
 using WebStore.Imfrastructure.Middleware;
+using WebStore.Sevices.InCookies;
 using WebStore.Sevices.InSQL;
 using WebStore.Sevices.Interfaces;
 
@@ -54,6 +55,7 @@ services.ConfigureApplicationCookie(opt =>
 
 services.AddScoped<IEmployeesData, SQLEmployeesData>();
 services.AddScoped<IProductData, SqlProductData>();
+services.AddScoped<ICartService, InCookiesCartService>();
 
 //services.AddScoped<IEmployeesData, InMemoryEmployeesData>();//контейнер сервисов(самый универсальный)
 //services.AddScoped<IProductData, SqlProductData>();
