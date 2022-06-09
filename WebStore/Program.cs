@@ -79,6 +79,7 @@ using (var scope = app.Services.CreateScope())
         AddTestData: app.Configuration.GetValue("DbAddTestData", false));
 }
 
+
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
