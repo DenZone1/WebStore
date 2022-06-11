@@ -6,6 +6,7 @@ using WebStore.Data;
 using WebStore.Domain.Entites.Identity;
 using WebStore.Imfrastructure.Conventions;
 using WebStore.Imfrastructure.Middleware;
+using WebStore.Infrastructure.Conventions;
 using WebStore.Sevices.InCookies;
 using WebStore.Sevices.InSQL;
 using WebStore.Sevices.Interfaces;
@@ -66,6 +67,7 @@ services.AddScoped<DbInitializer>();
 builder.Services.AddControllersWithViews(opt => 
 {
     opt.Conventions.Add(new TestCoventions()); //использование соглашений
+    opt.Conventions.Add(new AddAreaToControllerConvention());
 });
 
 services.AddAutoMapper(typeof(Program));
