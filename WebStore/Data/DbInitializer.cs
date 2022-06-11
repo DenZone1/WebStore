@@ -95,7 +95,7 @@ public class DbInitializer
 
             product.Id = 0;
             product.SectionId = 0;
-            product.BrandId = 0;
+            product.BrandId = null;
         }
 
         foreach (var brand in TestData.Brands)
@@ -104,7 +104,7 @@ public class DbInitializer
         foreach (var section in TestData.Sections)
         {
             section.Id = 0;
-            section.ParentId = 0;
+            section.ParentId = null;
         }    
 
         await using var transaction = await _db.Database.BeginTransactionAsync(Cancel);
