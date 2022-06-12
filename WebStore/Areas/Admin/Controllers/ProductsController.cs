@@ -22,4 +22,9 @@ public class ProductsController : Controller
         var products = _ProductData.GetProducts();
         return View(products);
     }
+    public IActionResult Edit(int id) => View();
+
+    public IActionResult Delete(int id) => View();
+
+
 }
