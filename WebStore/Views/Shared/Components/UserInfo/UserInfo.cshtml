@@ -4,10 +4,16 @@
     <ul class="nav navbar-nav">
             @if (User.IsInRole(Role.Administrator))
             {
-               <li> <a asp-area="Admin" asp-controller="Home" asp-action="Index">
-                   <i class="fa fa-key"></i> ADMIN</a> </li>
+              <li> <a asp-area="Admin" asp-controller="Home" asp-action="Index">
+                        <i class="fa fa-key"></i> ADMIN
+                   </a> 
+              </li>
             }
-        <li><a href="#"><i class="fa fa-user"></i> @User.Identity!.Name</a> </li>
+        <li>
+                <a href="#">
+                    <i class="fa fa-user"></i> @User.Identity!.Name
+                </a> 
+         </li>
       
         
         <li><a asp-controller="Cart" asp-action="Index" ><i class="fa fa-shopping-cart"></i> Корзина</a></li>
