@@ -64,10 +64,10 @@ public class InCookiesCartService : ICartService
         Cart = cart;
     }
 
-    public void Clear(int Id)
+    public void Clear()
     {
         var cart = Cart;
-        cart.Clear(Id);
+        cart.Clear();
         Cart = cart;
     }
 

@@ -38,7 +38,7 @@ public class Cart
 
     }
 
-    public void Clear(int ProductId)
+    public void Clear()
     {
        Items.Clear();
     }
