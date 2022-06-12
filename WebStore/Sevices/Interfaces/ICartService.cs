@@ -11,7 +11,9 @@ public interface ICartService
     void Remove(int Id);
 
     void Decrement(int Id);
-    void Clear(int Id);
+
+    void Clear();
 
     CartViewModel GetViewModel();
+    
 }
