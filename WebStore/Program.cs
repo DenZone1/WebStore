@@ -6,6 +6,9 @@ using WebStore.Data;
 using WebStore.Domain.Entites.Identity;
 using WebStore.Imfrastructure.Conventions;
 using WebStore.Imfrastructure.Middleware;
+using WebStore.Infrastructure.Conventions;
+using WebStore.Services.InSQL;
+using WebStore.Services.Interfaces;
 using WebStore.Sevices.InCookies;
 using WebStore.Sevices.InSQL;
 
@@ -89,7 +92,9 @@ services.AddScoped<IEmployeesData, SQLEmployeesData>();
 services.AddScoped<IEmployeesData, InMemoryEmployeesData>();//контейнер сервисов(самый универсальный)
 
 services.AddScoped<IProductData, SqlProductData>();
+services.AddScoped<IOrderService, SqlOrderService>();
 services.AddScoped<ICartService, InCookiesCartService>();
+
 
 //services.AddScoped<IEmployeesData, InMemoryEmployeesData>();//контейнер сервисов(самый универсальный)
 //services.AddScoped<IProductData, SqlProductData>();
@@ -100,6 +105,7 @@ services.AddScoped<DbInitializer>();
 builder.Services.AddControllersWithViews(opt => 
 {
     opt.Conventions.Add(new TestCoventions()); //использование соглашений
+    opt.Conventions.Add(new AddAreaToControllerConvention());
 });
 
 services.AddAutoMapper(typeof(Program));
@@ -137,5 +143,18 @@ app.UseWelcomePage("/welcome");
     app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+      name: "areas",
+      pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+    );
+
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}"
+    );
+});
 
 app.Run();
